@@ -14,6 +14,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "alexa-app": "^2.3.4"
+    "alexa-app": "^2.3.4",
+    "xmlhttprequest": "^1.8.0"
   }
 }

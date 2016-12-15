@@ -5,18 +5,32 @@ app.launch(function(request, response) {
     response.say('hello matt, and hello world');
 });
 
-app.intent('sampleIntent',
-    {
-        'slots': { 'WHEN': 'AMAZON.DATE' },
-        'utterances': [
-            'tell me about {-|WHEN}'
-        ]
-    },
+app.intent('helloIntent',  function(request, response) {
+  var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+  var xmlHttp = new XMLHttpRequest();
+  var url;
+  var name = request.slot('name');
 
-    function(request, response) {
-        response.say('helloWorld and stuff', request.slot('name'));
+  xmlHttp.onreadystatechange = function() {
+    if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+      response.say(JSON.parse(xmlHttp.responseText).message);
+      response.send();
     }
-);
+  }
+  if( name != undefined) {
+    url = 'http://www.mattcodes.com.au:3903/api/hello?name=' + name;
+  } else {
+    url = 'http://www.mattcodes.com.au:3903/api/hello';
+  }
+
+  xmlHttp.open("GET", url, true);
+  xmlHttp.send(null);
+
+  // return false to prevent response from automatically sending
+  // in order to wait for the get request,
+  // we manually send the response in onreadystatechange
+  return false;
+});
 
 
 if (process.argv.length > 2) {
